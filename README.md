@@ -14,13 +14,12 @@ Plain static HTML and CSS. No Jekyll (`.nojekyll` is present), no build step.
 ## Adding a project
 
 Add a `.card` to the Projects section of `index.html`, linking to its own subdomain. Keep the
-`.tag` honest about status — "In development" until something is actually published.
+`.tag` honest about status, "In development" until something is actually published.
 
 ## The palette
 
 `assets/css/site.css` is the same stylesheet the product sites use: the Catppuccin palette the
-Muralis app itself ships, Mocha for dark and Latte for light. It is a copy, not a shared asset —
-Pages has no way to share files across repos — so a change worth making here is probably worth
+Muralis app itself ships, Mocha for dark and Latte for light. It is a copy, not a shared asset, Pages has no way to share files across repos, so a change worth making here is probably worth
 porting to `muralis-site` too.
 
 ## Deploying
