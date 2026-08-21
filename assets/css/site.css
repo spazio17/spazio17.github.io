@@ -35,16 +35,25 @@
   --mono: ui-monospace, SFMono-Regular, 'JetBrains Mono', Menlo, Consolas, monospace;
   /* The lattice: a faint ruled grid, brighter nodes at the intersections, two
      accent pools behind it, and the colour of the pulse that crosses it. */
-  --grid-line: rgba(16, 26, 43, .10);
-  --grid-node: rgba(12, 143, 134, .34);
-  --hero-glow-1: rgba(12, 143, 134, .20);
-  --hero-glow-2: rgba(43, 82, 216, .16);
-  --scan: rgba(12, 143, 134, .26);
-  --edge: rgba(16, 26, 43, .18);
+  /* Light mode is not dark mode with the numbers turned up. On white, ruled
+     lines and dots carry far more weight than glows do, so the lines and nodes
+     come down and the colour pools go up: the same design, reweighted, rather
+     than the same alphas. */
+  --grid-line: rgba(16, 26, 43, .055);
+  --grid-node: rgba(12, 143, 134, .16);
+  --hero-glow-1: rgba(12, 143, 134, .22);
+  --hero-glow-2: rgba(43, 82, 216, .18);
+  --scan: rgba(12, 143, 134, .12);
+  --edge: rgba(16, 26, 43, .08);
+  --page-bg: var(--base);
+  --panel-bg: #ffffff;
+  --panel-shadow: 0 1px 2px rgba(16, 26, 43, .05), 0 12px 28px -20px rgba(16, 26, 43, .35);
   --mast: rgba(244, 247, 251, .78);
-  --hero-glow-3: rgba(181, 23, 158, .14);
-  --star: rgba(16, 26, 43, .30);
-  --star-bright: rgba(12, 143, 134, .55);
+  --hero-glow-3: rgba(181, 23, 158, .15);
+  /* Dark dots on white read as dirt rather than stars, so in light mode they
+     are barely there and the depth comes from the nebula instead. */
+  --star: rgba(16, 26, 43, .13);
+  --star-bright: rgba(12, 143, 134, .22);
   /* The pulse crossing the lattice brightens on dark and darkens on light, so
      the blend mode is a token rather than a fixed value. */
   --pulse-blend: multiply;
@@ -72,6 +81,9 @@
     --scan: rgba(60, 224, 200, .22);
     --edge: rgba(120, 160, 220, .18);
     --mast: rgba(6, 9, 16, .74);
+    --page-bg: var(--base);
+    --panel-bg: var(--mantle);
+    --panel-shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 16px 34px -22px rgba(0, 0, 0, .75);
     --hero-glow-3: rgba(255, 121, 217, .12);
     --star: rgba(200, 220, 255, .50);
     --star-bright: rgba(255, 255, 255, .85);
@@ -103,6 +115,9 @@ html[data-theme="dark"] {
   --scan: rgba(60, 224, 200, .22);
   --edge: rgba(120, 160, 220, .18);
   --mast: rgba(6, 9, 16, .74);
+  --page-bg: var(--base);
+  --panel-bg: var(--mantle);
+  --panel-shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 16px 34px -22px rgba(0, 0, 0, .75);
   --hero-glow-3: rgba(255, 121, 217, .12);
   --star: rgba(200, 220, 255, .50);
   --star-bright: rgba(255, 255, 255, .85);
@@ -117,7 +132,7 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background: var(--base);
+  background: var(--page-bg);
   color: var(--text);
   font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   line-height: 1.6;
@@ -290,6 +305,12 @@ a:hover { color: var(--accent); }
   border-radius: 50%;
   opacity: .55;
 }
+/* On white the two rings stopped reading as an orbit and started reading as
+   stray arcs across the copy, so light mode keeps one ring. */
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) .hero > .orbit::before { display: none; }
+}
+html[data-theme="light"] .hero > .orbit::before { display: none; }
 .hero > .orbit .sat {
   position: absolute;
   top: -5px;
@@ -347,7 +368,7 @@ a:hover { color: var(--accent); }
 .facts li {
   font-size: .8rem;
   color: var(--subtext);
-  background: var(--mantle);
+  background: var(--panel-bg);
   border: 1px solid var(--border);
   border-radius: 999px;
   padding: .32rem .8rem;
@@ -482,7 +503,8 @@ section > .wrap > .intro { color: var(--subtext); max-width: var(--measure); mar
 .cards.narrow { grid-template-columns: repeat(auto-fill, minmax(min(100%, 17rem), 26rem)); }
 
 .card {
-  background: var(--mantle);
+  background: var(--panel-bg);
+  box-shadow: var(--panel-shadow);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 1.1rem 1.15rem 1.2rem;
@@ -726,6 +748,8 @@ footer a:hover { color: var(--accent); }
         var(--accent-alt) 52%,
         var(--accent-3) 70%,
         var(--text) 94%);
+    /* Every stop is a dark colour in light mode, so the travelling highlight
+       changes hue without ever losing contrast against white. */
     background-size: 260% 100%;
     background-position: 0 0;
     -webkit-background-clip: text;
@@ -836,15 +860,18 @@ footer a:hover { color: var(--accent); }
   100% { box-shadow: 0 0 0 0 transparent; }
 }
 
-/* Reveal on scroll. The hidden state is applied only once motion.js has set
-   .reveals on <html>, so a reader with no JavaScript sees a normal page rather
-   than an empty one. */
-.reveals .reveal {
-  opacity: 0;
-  transform: translateY(16px);
-  transition: opacity .7s ease, transform .7s cubic-bezier(.2, .7, .2, 1);
+/* Reveal on scroll, as an animation rather than a hidden base state. The first
+   version set opacity: 0 and waited for motion.js to clear it, which means one
+   observer callback that never arrives is a page of invisible text. Keeping the
+   hidden state inside the keyframes makes that impossible: an element only ever
+   reaches it while it is being animated. */
+.reveal.in {
+  animation: rise .7s cubic-bezier(.2, .7, .2, 1) both;
 }
-.reveals .reveal.in { opacity: 1; transform: none; }
+@keyframes rise {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: none; }
+}
 
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; animation: none !important; }
@@ -852,5 +879,5 @@ footer a:hover { color: var(--accent); }
      nebula and starfield stand still and still look deliberate. */
   .hero > .pulse,
   .hero > .orbit { display: none; }
-  .reveals .reveal { opacity: 1 !important; transform: none !important; }
+  .reveal.in { animation: none !important; }
 }

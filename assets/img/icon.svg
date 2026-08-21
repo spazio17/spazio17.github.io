@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Spazio17">
+  <!--
+    Spazio17 mark. Not a rocket: an orbit around a lit node, which is the same
+    idea the site's hero is built on, a machine sitting in space. One bold
+    ellipse carries the read at 16px, the second is detail that only appears
+    larger, and the tile keeps its own dark ground so the mark works against a
+    light browser UI as well as a dark one.
+
+    Palette is the site's: aqua #3ce0c8, periwinkle #7f9bff, magenta #ff79d9 on
+    the near black navy of the dark theme.
+  -->
+  <defs>
+    <linearGradient id="tile" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#101a2e"/>
+      <stop offset="1" stop-color="#05070d"/>
+    </linearGradient>
+    <radialGradient id="core" cx="38%" cy="34%" r="70%">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="55%" stop-color="#a8f0e4"/>
+      <stop offset="100%" stop-color="#3ce0c8"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="64" height="64" rx="15" fill="url(#tile)"/>
+  <rect x=".75" y=".75" width="62.5" height="62.5" rx="14.4" fill="none"
+        stroke="#7f9bff" stroke-opacity=".22" stroke-width="1.5"/>
+
+  <!-- Lattice: four nodes of the hero's grid, just enough to read as structure. -->
+  <g fill="#7f9bff" fill-opacity=".30">
+    <circle cx="14" cy="14" r="1.3"/>
+    <circle cx="50" cy="14" r="1.3"/>
+    <circle cx="14" cy="50" r="1.3"/>
+    <circle cx="50" cy="50" r="1.3"/>
+  </g>
+
+  <!-- Inner orbit, the detail pass. -->
+  <ellipse cx="32" cy="32" rx="15" ry="6.2" fill="none" stroke="#7f9bff"
+           stroke-opacity=".75" stroke-width="1.8" transform="rotate(38 32 32)"/>
+
+  <!-- Outer orbit, the one that has to survive a favicon. -->
+  <ellipse cx="32" cy="32" rx="23" ry="9.4" fill="none" stroke="#3ce0c8"
+           stroke-width="2.6" transform="rotate(-22 32 32)"/>
+
+  <!-- The node, lit. -->
+  <circle cx="32" cy="32" r="7.8" fill="#080d18"/>
+  <circle cx="32" cy="32" r="6.3" fill="url(#core)"/>
+
+  <!-- Satellite, on the outer path, in the third accent so the mark carries all
+       three colours the site does. -->
+  <circle cx="53.3" cy="23.5" r="3.1" fill="#ff79d9"/>
+  <circle cx="10.7" cy="40.5" r="2" fill="#3ce0c8" fill-opacity=".85"/>
+</svg>
