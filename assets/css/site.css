@@ -1,54 +1,81 @@
 /*
- * spazio17 site styles, shared byte-for-byte between muralis-site and
- * spazio17.github.io. Pages cannot share an asset across repos, so this file is
- * copied; keep the copies identical so a fix lands in both.
+ * spazio17.org styles. This file used to be a byte-for-byte copy of
+ * muralis-site's, and is deliberately no longer: the umbrella site has its own
+ * palette and its own motion layer, while muralis-site stays on Catppuccin
+ * because that palette is the app's and the two have to read as one product.
  *
- * The custom properties below are copied verbatim from the app's own palette
- * (KioskTheme.java on the tablet, PAGE_CSS in HttpAdminServer.java for the web
- * admin): Catppuccin Mocha for dark, Latte for light, accents pushed further
- * towards saturation. Same names, same values, same light/dark mechanism, so
- * the site, the tablet UI and the web admin read as one product. If a colour
- * changes in the app, change it here too.
+ * So a fix here no longer belongs there automatically. What still holds is the
+ * *shape*: same class names, same light/dark mechanism, same token names, so a
+ * structural fix is still a small manual port either way.
+ *
+ * The palette is "signal": near-black navy, aqua and periwinkle. Chosen to sit
+ * next to Catppuccin without competing with it, and dark-first, because the
+ * lattice backdrop below is a dark-room effect that light mode only borrows.
  */
 :root {
   color-scheme: light dark;
-  --base: #eff1f5;
-  --mantle: #e6e9ef;
-  --surface: #dce0e8;
-  --surface-alt: #ccd0da;
-  --border: #bcc0cc;
-  --text: #4c4f69;
-  --subtext: #6c6f85;
-  --accent: #8226ef;
-  --accent-alt: #1e66f5;
-  --ok: #2fa019;
-  --warn: #d68000;
-  --bad: #d20f39;
+  --base: #f4f7fb;
+  --mantle: #ffffff;
+  --surface: #e9eff7;
+  --surface-alt: #dbe4f0;
+  --border: #ccd8e6;
+  --text: #101a2b;
+  --subtext: #4d5f78;
+  /* Teal rather than the aqua used in dark: the light accent has to survive on
+     white at body-text size, and #3ce0c8 does not. */
+  --accent: #0c8f86;
+  --accent-alt: #2b52d8;
+  --accent-3: #b5179e;
+  --ok: #17803d;
+  --warn: #b45309;
+  --bad: #be123c;
   --radius: 14px;
   --measure: 68ch;
   --page: 1120px;
-  --hero-grid: rgba(76, 79, 105, .10);
-  --hero-glow-1: rgba(130, 38, 239, .10);
-  --hero-glow-2: rgba(30, 102, 245, .08);
+  --mono: ui-monospace, SFMono-Regular, 'JetBrains Mono', Menlo, Consolas, monospace;
+  /* The lattice: a faint ruled grid, brighter nodes at the intersections, two
+     accent pools behind it, and the colour of the pulse that crosses it. */
+  --grid-line: rgba(16, 26, 43, .10);
+  --grid-node: rgba(12, 143, 134, .34);
+  --hero-glow-1: rgba(12, 143, 134, .20);
+  --hero-glow-2: rgba(43, 82, 216, .16);
+  --scan: rgba(12, 143, 134, .26);
+  --edge: rgba(16, 26, 43, .18);
+  --mast: rgba(244, 247, 251, .78);
+  --hero-glow-3: rgba(181, 23, 158, .14);
+  --star: rgba(16, 26, 43, .30);
+  --star-bright: rgba(12, 143, 134, .55);
+  /* The pulse crossing the lattice brightens on dark and darkens on light, so
+     the blend mode is a token rather than a fixed value. */
+  --pulse-blend: multiply;
 }
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --base: #1e1e2e;
-    --mantle: #181825;
-    --surface: #313244;
-    --surface-alt: #45475a;
-    --border: #585b70;
-    --text: #cdd6f4;
-    --subtext: #a6adc8;
-    --accent: #c08cff;
-    --accent-alt: #7aa2ff;
-    --ok: #8ee88a;
-    --warn: #ffdf8f;
-    --bad: #ff6f91;
-    --hero-grid: rgba(205, 214, 244, .07);
-    --hero-glow-1: rgba(192, 140, 255, .16);
-    --hero-glow-2: rgba(122, 162, 255, .12);
+    --base: #060910;
+    --mantle: #0c1220;
+    --surface: #141d2e;
+    --surface-alt: #1d2940;
+    --border: #253451;
+    --text: #e7eefb;
+    --subtext: #9cb0cc;
+    --accent: #3ce0c8;
+    --accent-alt: #7f9bff;
+    --accent-3: #ff79d9;
+    --ok: #56d98a;
+    --warn: #ffd166;
+    --bad: #ff6b81;
+    --grid-line: rgba(160, 190, 230, .07);
+    --grid-node: rgba(60, 224, 200, .22);
+    --hero-glow-1: rgba(60, 224, 200, .14);
+    --hero-glow-2: rgba(127, 155, 255, .13);
+    --scan: rgba(60, 224, 200, .22);
+    --edge: rgba(120, 160, 220, .18);
+    --mast: rgba(6, 9, 16, .74);
+    --hero-glow-3: rgba(255, 121, 217, .12);
+    --star: rgba(200, 220, 255, .50);
+    --star-bright: rgba(255, 255, 255, .85);
+    --pulse-blend: screen;
   }
 }
 
@@ -56,21 +83,30 @@ html[data-theme="light"] { color-scheme: light; }
 
 html[data-theme="dark"] {
   color-scheme: dark;
-  --base: #1e1e2e;
-  --mantle: #181825;
-  --surface: #313244;
-  --surface-alt: #45475a;
-  --border: #585b70;
-  --text: #cdd6f4;
-  --subtext: #a6adc8;
-  --accent: #c08cff;
-  --accent-alt: #7aa2ff;
-  --ok: #8ee88a;
-  --warn: #ffdf8f;
-  --bad: #ff6f91;
-  --hero-grid: rgba(205, 214, 244, .07);
-  --hero-glow-1: rgba(192, 140, 255, .16);
-  --hero-glow-2: rgba(122, 162, 255, .12);
+  --base: #060910;
+  --mantle: #0c1220;
+  --surface: #141d2e;
+  --surface-alt: #1d2940;
+  --border: #253451;
+  --text: #e7eefb;
+  --subtext: #9cb0cc;
+  --accent: #3ce0c8;
+  --accent-alt: #7f9bff;
+  --accent-3: #ff79d9;
+  --ok: #56d98a;
+  --warn: #ffd166;
+  --bad: #ff6b81;
+  --grid-line: rgba(160, 190, 230, .07);
+  --grid-node: rgba(60, 224, 200, .22);
+  --hero-glow-1: rgba(60, 224, 200, .14);
+  --hero-glow-2: rgba(127, 155, 255, .13);
+  --scan: rgba(60, 224, 200, .22);
+  --edge: rgba(120, 160, 220, .18);
+  --mast: rgba(6, 9, 16, .74);
+  --hero-glow-3: rgba(255, 121, 217, .12);
+  --star: rgba(200, 220, 255, .50);
+  --star-bright: rgba(255, 255, 255, .85);
+  --pulse-blend: screen;
 }
 
 * { box-sizing: border-box; }
@@ -151,31 +187,152 @@ a:hover { color: var(--accent); }
 
 /* -------------------------------------------------------------------- hero
  *
- * The backdrop is drawn, not photographed: a square grid standing in for a
- * tiled wall and a dashboard's tiles, lit by two soft accent glows. Pure
- * gradients, so it costs no request, ships no binary, and recolours itself with
- * the theme instead of needing a second file for dark mode. The mask fades it
- * out before it reaches the text, which is what keeps it an accent rather than
- * a pattern competing with the copy.
+ * spazio is "space", so the backdrop is one, with the smart home laid over it:
+ * a drifting starfield, three nebula pools in the three accents, and above them
+ * a ruled lattice with lit nodes standing in for a tiled wall and a dashboard's
+ * tiles. A pulse crosses the lattice every nine seconds and a satellite runs a
+ * slow orbit behind the copy.
  *
- * To put a real photograph behind the hero later, add it as the first layer of
- * the background shorthand below and drop the grid's two repeating gradients.
+ * Five layers, all of them gradients and transforms: no request, no image, no
+ * second file for dark mode, and everything that moves moves on the compositor
+ * rather than in layout. Order back to front is starfield, nebula (::before),
+ * lattice (::after), orbit, pulse, copy.
+ *
+ * Every layer is decoration and is marked aria-hidden in the markup. The whole
+ * lot is switched off by prefers-reduced-motion at the end of this file, which
+ * is why each one has to look right standing still as well as moving.
  */
 
-.hero { position: relative; overflow: hidden; padding: 6rem 0 3.5rem; }
+.hero {
+  position: relative;
+  overflow: hidden;
+  padding: 7.5rem 0 4.5rem;
+  /* Contains the layers' z-index so nothing here can slide above the masthead. */
+  isolation: isolate;
+}
 
+/* The base rule below gives every direct child position: relative, which the
+   decorative layers must escape to stack. */
+.hero > .starfield,
+.hero > .orbit,
+.hero > .pulse { position: absolute; pointer-events: none; }
+
+/* ::after is inserted as the element's last child, so at equal z-index the
+   lattice paints over the copy rather than behind it. The copy is lifted one
+   step instead of pushing four layers negative, which would put them behind the
+   hero's own background. */
+.hero > .wrap { position: relative; z-index: 1; }
+
+/* Nebula. Three pools, one per accent, breathing on a slow alternate cycle so
+   the colour behind the wordmark is never quite the same twice. */
 .hero::before {
   content: "";
   position: absolute;
-  inset: 0;
+  inset: -25% -10% auto -10%;
+  height: 145%;
+  z-index: 0;
   pointer-events: none;
   background:
-    radial-gradient(38rem 22rem at 10% -15%, var(--hero-glow-1), transparent 70%),
-    radial-gradient(32rem 20rem at 88% 5%, var(--hero-glow-2), transparent 70%),
-    repeating-linear-gradient(to right, var(--hero-grid) 0 1px, transparent 1px 4.5rem),
-    repeating-linear-gradient(to bottom, var(--hero-grid) 0 1px, transparent 1px 4.5rem);
-  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 40%, transparent 92%);
-  mask-image: linear-gradient(to bottom, #000 0%, #000 40%, transparent 92%);
+    radial-gradient(40rem 24rem at 12% -12%, var(--hero-glow-1), transparent 70%),
+    radial-gradient(34rem 21rem at 86% 4%, var(--hero-glow-2), transparent 70%),
+    radial-gradient(30rem 20rem at 58% 32%, var(--hero-glow-3), transparent 72%);
+  animation: nebula 21s ease-in-out infinite alternate;
+}
+
+/* Lattice. Ruled lines plus a lit node at every intersection, drifting exactly
+   one cell per cycle so the loop is seamless. */
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    radial-gradient(circle at 1px 1px, var(--grid-node) 1.4px, transparent 1.6px),
+    repeating-linear-gradient(to right, var(--grid-line) 0 1px, transparent 1px 4.5rem),
+    repeating-linear-gradient(to bottom, var(--grid-line) 0 1px, transparent 1px 4.5rem);
+  background-size: 4.5rem 4.5rem, auto, auto;
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 45%, transparent 94%);
+  mask-image: linear-gradient(to bottom, #000 0%, #000 45%, transparent 94%);
+  animation: lattice 26s linear infinite;
+}
+
+/* Starfield. Three dot layers at different sizes and drift rates, which is what
+   gives parallax without a second element per layer. */
+.hero > .starfield {
+  inset: 0;
+  z-index: 0;
+  background-image:
+    radial-gradient(1.6px 1.6px at 30% 20%, var(--star-bright) 50%, transparent 50%),
+    radial-gradient(1.2px 1.2px at 72% 62%, var(--star) 50%, transparent 50%),
+    radial-gradient(1px 1px at 16% 76%, var(--star) 50%, transparent 50%);
+  background-size: 320px 320px, 230px 230px, 170px 170px;
+  animation: stars 120s linear infinite, twinkle 7s ease-in-out infinite alternate;
+}
+
+/* Orbit. Two rings off the top right corner with a lit satellite on the outer
+   one; rotating the ring is what carries the satellite around it. */
+.hero > .orbit {
+  top: -16rem;
+  right: -15rem;
+  width: 44rem;
+  height: 44rem;
+  z-index: 0;
+  border: 1px solid var(--edge);
+  border-radius: 50%;
+  animation: spin 54s linear infinite;
+}
+.hero > .orbit::before {
+  content: "";
+  position: absolute;
+  inset: 7rem;
+  border: 1px dashed var(--edge);
+  border-radius: 50%;
+  opacity: .55;
+}
+.hero > .orbit .sat {
+  position: absolute;
+  top: -5px;
+  left: 50%;
+  width: 9px;
+  height: 9px;
+  margin-left: -4.5px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 16px 3px var(--scan);
+}
+
+/* Pulse. One wide diagonal band of accent light crossing the lattice, then a
+   long pause offscreen: 60% travel, 40% held, which reads as a heartbeat
+   rather than a metronome. */
+.hero > .pulse {
+  inset: -20% -35%;
+  z-index: 0;
+  background: linear-gradient(100deg, transparent 42%, var(--scan) 50%, transparent 58%);
+  mix-blend-mode: var(--pulse-blend);
+  animation: pulse-cross 9s linear infinite;
+}
+
+@keyframes nebula {
+  from { opacity: .75; transform: scale(1); }
+  to { opacity: 1; transform: scale(1.06); }
+}
+@keyframes lattice {
+  to { background-position: 4.5rem 4.5rem, 4.5rem 0, 0 4.5rem; }
+}
+@keyframes stars {
+  to { background-position: 320px -160px, -230px 115px, 170px 85px; }
+}
+@keyframes twinkle {
+  from { opacity: .55; }
+  to { opacity: 1; }
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+@keyframes pulse-cross {
+  0% { transform: translate3d(-45%, 0, 0); }
+  60%, 100% { transform: translate3d(65%, 0, 0); }
 }
 
 .hero > * { position: relative; }
@@ -231,7 +388,19 @@ a:hover { color: var(--accent); }
 
 /* ---------------------------------------------------------------- sections */
 
-section { padding: 4rem 0; border-top: 1px solid var(--border); }
+section { position: relative; padding: 4.5rem 0; border-top: 0; }
+/* A ruled border edge to edge is the dullest thing on a page. Same hairline,
+   faded at both ends and lit in the middle. */
+section::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--edge) 18%, var(--accent) 50%, var(--edge) 82%, transparent);
+  opacity: .55;
+}
 section > .wrap > h2 {
   font-size: 1.5rem;
   margin: 0 0 .4rem;
@@ -538,6 +707,150 @@ footer nav { display: flex; flex-wrap: wrap; gap: 1rem; margin-left: auto; }
 footer a { color: var(--subtext); }
 footer a:hover { color: var(--accent); }
 
+/* ================================================ alive, the rest of the page
+ *
+ * Everything below is enhancement over a page that already works without it.
+ * Two rules for the whole block: nothing here may hide content when the
+ * scripting or the property is unavailable, and nothing here may move unless
+ * the reader has not asked for less motion.
+ */
+
+/* The wordmark, lit by a sheen that travels the three accents. Guarded, because
+   background-clip: text with a transparent colour is invisible text if the
+   property does not take. */
+@supports ((-webkit-background-clip: text) or (background-clip: text)) {
+  .hero h1 {
+    background-image: linear-gradient(100deg,
+        var(--text) 8%,
+        var(--accent) 32%,
+        var(--accent-alt) 52%,
+        var(--accent-3) 70%,
+        var(--text) 94%);
+    background-size: 260% 100%;
+    background-position: 0 0;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: sheen 17s ease-in-out infinite alternate;
+  }
+}
+@keyframes sheen {
+  from { background-position: 0 0; }
+  to { background-position: 100% 0; }
+}
+
+/* Fact pills, in mono with a lit node, so the hero reads as instrumentation
+   rather than three more sentences. */
+.hero .facts li {
+  font-family: var(--mono);
+  font-size: .74rem;
+  letter-spacing: .02em;
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  transition: border-color .25s ease, color .25s ease, transform .25s ease;
+}
+.hero .facts li::before {
+  content: "";
+  width: .4rem;
+  height: .4rem;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 8px 1px var(--scan);
+}
+.hero .facts li:hover { border-color: var(--accent); color: var(--text); transform: translateY(-2px); }
+
+/* Masthead. Transparent over the hero, frosted once the page has scrolled under
+   it; the class is set by motion.js. */
+.masthead { transition: background-color .3s ease, border-color .3s ease, backdrop-filter .3s ease; }
+.scrolled .masthead {
+  background: var(--mast);
+  -webkit-backdrop-filter: blur(12px) saturate(1.4);
+  backdrop-filter: blur(12px) saturate(1.4);
+  border-bottom-color: var(--edge);
+}
+.brand { font-family: var(--mono); letter-spacing: -.01em; }
+.masthead nav a { position: relative; }
+.masthead nav a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -.3rem;
+  height: 1px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform .25s ease;
+}
+.masthead nav a:hover::after,
+.masthead nav a:focus-visible::after { transform: scaleX(1); }
+
+/* Cards. A lit top edge that draws itself in on hover, and a lift. focus-within
+   gets the same treatment so a keyboard reaches it. */
+.card {
+  position: relative;
+  overflow: hidden;
+  transition: transform .28s ease, border-color .28s ease, box-shadow .28s ease;
+}
+.card::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, var(--accent), var(--accent-alt) 55%, var(--accent-3));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform .4s ease;
+}
+.card:hover,
+.card:focus-within {
+  transform: translateY(-3px);
+  border-color: var(--accent);
+  box-shadow: 0 14px 34px -16px var(--hero-glow-1), 0 0 0 1px var(--scan);
+}
+.card:hover::after,
+.card:focus-within::after { transform: scaleX(1); }
+
+/* The status tag, with a pulse on its node: this is the one thing on the page
+   that says work is ongoing, so it is the one thing that ought to blink. */
+.card .tag {
+  font-family: var(--mono);
+  display: inline-flex;
+  align-items: center;
+  gap: .45rem;
+}
+.card .tag::before {
+  content: "";
+  width: .45rem;
+  height: .45rem;
+  border-radius: 50%;
+  background: var(--accent);
+  animation: ping 2.8s ease-out infinite;
+}
+@keyframes ping {
+  0% { box-shadow: 0 0 0 0 var(--scan); }
+  70% { box-shadow: 0 0 0 .55rem transparent; }
+  100% { box-shadow: 0 0 0 0 transparent; }
+}
+
+/* Reveal on scroll. The hidden state is applied only once motion.js has set
+   .reveals on <html>, so a reader with no JavaScript sees a normal page rather
+   than an empty one. */
+.reveals .reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity .7s ease, transform .7s cubic-bezier(.2, .7, .2, 1);
+}
+.reveals .reveal.in { opacity: 1; transform: none; }
+
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; animation: none !important; }
+  /* The two layers whose whole point is movement go away entirely; the lattice,
+     nebula and starfield stand still and still look deliberate. */
+  .hero > .pulse,
+  .hero > .orbit { display: none; }
+  .reveals .reveal { opacity: 1 !important; transform: none !important; }
 }

@@ -6,7 +6,7 @@
 <title>spazio17, software projects for the smart home</title>
 <meta name="description" content="Software projects for the smart home, from spazio17.">
 <link rel="canonical" href="https://spazio17.org/">
-<link rel="stylesheet" href="assets/css/site.css">
+<link rel="stylesheet" href="assets/css/site.css?v=2">
 <meta property="og:type" content="website">
 <meta property="og:title" content="spazio17">
 <meta property="og:description" content="Software projects for the smart home.">
@@ -37,6 +37,12 @@
 <main>
 
   <div class="hero">
+    <!-- Decoration only, and marked so: a starfield, an orbit with its satellite, and
+         the pulse that crosses the lattice. The lattice and the nebula behind them are
+         the hero's own ::after and ::before, so they need no element. -->
+    <div class="starfield" aria-hidden="true"></div>
+    <div class="orbit" aria-hidden="true"><span class="sat"></span></div>
+    <div class="pulse" aria-hidden="true"></div>
     <div class="wrap">
       <h1>spazio17</h1>
       <p class="lede">Software projects for the smart home.</p>
@@ -44,14 +50,19 @@
         Small, self-contained tools built to run unattended for months at a time, on hardware you
         already own.
       </p>
+      <ul class="facts">
+        <li>Self-contained</li>
+        <li>Runs unattended</li>
+        <li>Hardware you own</li>
+      </ul>
     </div>
   </div>
 
   <section>
     <div class="wrap">
-      <h2>Projects</h2>
+      <h2 class="reveal">Projects</h2>
       <div class="cards narrow">
-        <div class="card">
+        <div class="card reveal">
           <span class="tag">In development</span>
           <h3><a href="https://muralis.spazio17.org/">Muralis</a></h3>
           <p>
@@ -76,6 +87,7 @@
   </div>
 </footer>
 
-<script src="assets/js/theme.js"></script>
+<script src="assets/js/theme.js?v=2"></script>
+<script src="assets/js/motion.js?v=2"></script>
 </body>
 </html>
